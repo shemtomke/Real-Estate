@@ -6,37 +6,47 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    public GameObject pauseCanvas;
+
+    bool isPaused;
 
     private void Start()
     {
-        
+        isPaused = false;
     }
-    private void Awake()
+    private void Update()
     {
-        if (instance != null && instance != this)
+        //escape key is pressed
+        if(Input.GetKeyUp(KeyCode.Escape))
         {
-            Destroy(this.gameObject);
+            isPaused=!isPaused;
+        }
+
+        //no button function
+        if(isPaused)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 0f;
+            pauseCanvas.SetActive(true);
         }
         else
         {
-            instance = this;
-            DontDestroyOnLoad(transform.root);
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Time.timeScale = 1f;
+            pauseCanvas.SetActive(false);
         }
     }
-    public void ViewGame()
+    public void MainMenu()
     {
-        //load the game scene
-
-    }
-    public void ResumeGame()
-    {
-
+        //load the main menu scene
+        SceneManager.LoadScene(0);
     }
 
-    public void PauseGame()
+    public void ResumeGame() //set onclick button
     {
-
+        isPaused = false;
     }
 
     public void ExitGame()
